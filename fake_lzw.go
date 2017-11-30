@@ -2,25 +2,30 @@ package main
 import "fmt"
 import "compress/lzw"
 import "bytes"
-import "io"
+import "os"
+import "strconv"
 
 
 func pack(i []byte,)[]byte{
 	litw := 8
 	var buf bytes.Buffer
 	com := lzw.NewWriter(&buf, lzw.LSB, litw)
-	w, err := com.Write(data)
+	w, err := com.Write(i)
 	if err != nil {
 		fmt.Println("lzw","write error:", err)
 	}
 	com.Close()
+	if w==0{
+		fmt.Println("Packed to 0. Isn't that extremely small?") // just a fake line
+	}
 	return buf.Bytes()
 }
 
 func unpack(i []byte,size int)[]byte{
 	litw := 8
-	buf:=bytes.NewBuffer(i)
-	var output = make([]byte, len(data))
+	var buf bytes.Buffer
+	buf=*bytes.NewBuffer(i)
+	var output = make([]byte, size)
 	dec := lzw.NewReader(&buf, lzw.LSB, litw)
 	r, err := dec.Read(output)
 	if err != nil {
@@ -28,10 +33,11 @@ func unpack(i []byte,size int)[]byte{
 	}
 	if r!=size {
 		fmt.Println("WARNING! LZW: Size of unpacked buffer doesn't match the requested size")
+		fmt.Printf("Wanted %d but I got %d\n",size,r)
 	}
 	return output
 }
-func Val(s string) int {
+func val(s string) int {
 	r,e:=strconv.Atoi(s)
 	if e!=nil {
 		r=0
@@ -41,12 +47,19 @@ func Val(s string) int {
 
 
 func runpack(){
-	bi:=os.Open(os.Args[2])
+	bi,err:=os.Open(os.Args[2])
+	if err!=nil {
+		panic(err)
+	}
 	s:=val(os.Args[4])
-	up:=os.Read(s)
+	up:=make([]byte,s)
+	bi.Read(up)
 	bi.Close()
 	p:=pack(up)
-	bo:=os.Create(os.Args[3])
+	bo,erro:=os.Create(os.Args[3])
+	if erro!=nil {
+		panic(erro)
+	}
 	bo.Write(p)
 	bo.Close()
 }
@@ -55,13 +68,20 @@ func rununpack(){
 	if len(os.Args)<6{
 		fmt.Println("dafuk?")
 	} else {
-		bi:=os.Open(os.Args[2])
+		bi,err:=os.Open(os.Args[2])
+		if err!=nil {
+			panic(err)
+		}
 		ps:=val(os.Args[4])
-		us:=val(os.Args[5]
-		p:=os.Read(ps)
+		us:=val(os.Args[5])
+		p:=make([]byte,ps)
+		bi.Read(p)
 		bi.Close()
-		up:=unpack(us)
-		bo:=os.Create(os.Args[3])
+		up:=unpack(p,us)
+		bo,erro:=os.Create(os.Args[3])
+		if erro!=nil {
+			panic(erro)
+		}
 		bo.Write(up)
 		bo.Close()
 	}
@@ -74,7 +94,7 @@ func main(){
 		switch(os.Args[1]){
 			case "p": runpack()
 			case "u": rununpack()
-			default:  fmt.Prints("huh? I dongecha!")
+			default:  fmt.Println("huh? I dongecha!")
 		}
 	}
 }
