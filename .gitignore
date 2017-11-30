@@ -2,4 +2,5 @@
 !*.bmx
 !*.md
 !*.go
+!License
 .gitignore
