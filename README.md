@@ -9,3 +9,6 @@ Please note if you are going to use the cli tools while this setup is still the 
 The binaries of the cli tools will be able to put the GO file into a temp dir and Go can run Go programs without having to convert them into executables.
 
 This is just a temp setup in my current plans.
+
+Please note all .go files are programs on their own, so the directory they are in does not count as the package.
+I know this setup is rather unusual for Go, but for this quick set up it was the easiest and most efficient way to go.
