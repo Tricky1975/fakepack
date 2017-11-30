@@ -6,3 +6,5 @@ Rem
 	fakepack.bmx is for actually putting all this in a module.
 	
 End Rem
+
+Incbin "fake_lzw.go"
