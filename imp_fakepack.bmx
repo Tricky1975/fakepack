@@ -38,7 +38,7 @@ Type JCR6_FAKEDRIVER Extends DRV_Compression
 	DeleteFile(wd+"1_packed")	
 	SaveBank b,wd+"1_prepack"
 	installfake name
-	system_ "go run '"+wd+n+".go' p '"+wd+"1_prepack' '"+wd+"1_packed' "+BankSize(b)	
+	system_ "go run '"+wd+name+".go' p '"+wd+"1_prepack' '"+wd+"1_packed' "+BankSize(b)	
 	Return LoadBank(wd+"1_packed")
 	End Method
 
@@ -46,7 +46,7 @@ Type JCR6_FAKEDRIVER Extends DRV_Compression
 	DeleteFile(wd+"2_unpacked")	
 	SaveBank b,wd+"2_preunpack"
 	installfake name
-	system_ "go run '"+wd+n+".go' p '"+wd+"1_prepack' '"+wd+"1_packed' "+BankSize(b)+" "+truesize
+	system_ "go run '"+wd+name+".go' p '"+wd+"1_prepack' '"+wd+"1_packed' "+BankSize(b)+" "+truesize
 	Return LoadBank(wd+"2_unpacked")
 	End Method
 
@@ -62,5 +62,5 @@ For Local dr$=EachIn d
 	JFD.name=dr
 	RegisterCompDriver dr,JFD
 	Print "JCR6 - Faked: "+dr
-next
+Next
 
