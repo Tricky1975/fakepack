@@ -17,10 +17,10 @@ Rem
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 End Rem
-Rem
-bbdoc: Fake Pack Routines. Use them if you wish
-End Rem
 
 Module trickyfake.fakepack
 
 Import "imp_fakepack.bmx"
+
+MKL_Version "Fake Pack - fakepack.bmx","17.11.30"
+MKL_Lic     "Fake Pack - fakepack.bmx","ZLib License"
